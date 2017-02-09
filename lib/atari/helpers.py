@@ -11,9 +11,10 @@ class AtariEnvWrapper(object):
     return getattr(self.env, name)
 
   def step(self, *args, **kwargs):
-    lives_before = self.env.ale.lives()
+    # unwrapped the <TimeLimit> wrapper on Gym.env
+    lives_before = self.env.unwrapped.ale.lives()
     next_state, reward, done, info = self.env.step(*args, **kwargs)
-    lives_after = self.env.ale.lives()
+    lives_after = self.env.unwrapped.ale.lives()
 
     # End the episode when a life is lost
     if lives_before > lives_after:
